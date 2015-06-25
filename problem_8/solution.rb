@@ -1,6 +1,6 @@
 require 'pp'
 
-str = <<NUM
+str = <<NUM.gsub!(/\n/, '')
 73167176531330624919225119674426574742355349194934
 96983520312774506326239578318016984801869478851843
 85861560789112949495459501737958331952853208805511
@@ -23,14 +23,8 @@ str = <<NUM
 71636269561882670428252483600823257530420752963450
 NUM
 
-str.gsub!(/\n/, '')
-sets = []
+puts ((1..984).reduce do |max, n|
+  numbers = str[n..(n + 12)].chars.map(&:to_i)
 
-1.upto(996) do |n|
-  range = str[n..(n + 4)]
-  next if range.include? '0'
-  sets << str[n..(n + 4)].chars.map(&:to_i)
-end
-
-products = sets.uniq.map { |set| set.reduce(&:*) }
-puts products.max
+  [max, numbers.reduce(&:*)].max
+end)
